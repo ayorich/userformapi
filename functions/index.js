@@ -34,28 +34,6 @@ app.post("/", (request, response) => {
         });
 });
 
-// GET / method
-app.get("/", (request, response) => {
-    return admin.database().ref('/entries').on("value", snapshot => {
-        return response.status(200).send(snapshot.val());
-    }, error => {
-        console.error(error);
-        return response.status(500).send('Oh no! Error: ' + error);
-    });
-});
-
-    
-exports.helloWorld = functions.https.onRequest((request, response) => {
- response.send("Hello from Firebase!");
-});
-
-
-
-// ONCREATE
-// const countUp = () => {
-//   let count = 0;
-//   return count = count + 1;
-// }
 
 const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
 const keyGen = uuidv5('Get_Key', MY_NAMESPACE); 
@@ -68,5 +46,32 @@ exports.dbCreate = functions.database.ref('/entries/{id}').onCreate(
     return snapshot.ref.update(newData);
 });
 
+exports.helloWorld = functions.https.onRequest((request, response) => {
+ response.send("Hello from Firebase!");
+});
 
 exports.entries = functions.https.onRequest(app);
+
+
+
+
+
+
+
+
+
+
+
+
+// // GET / method
+// app.get("/", (request, response) => {
+//     return admin.database().ref('/entries').on("value", snapshot => {
+//         return response.status(200).send(snapshot.val());
+//     }, error => {
+//         console.error(error);
+//         return response.status(500).send('Oh no! Error: ' + error);
+//     });
+// });
+
+    
+
