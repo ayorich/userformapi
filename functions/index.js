@@ -5,10 +5,20 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-
 const app = express();
-app.use(cors());
 
+const uuidv5 = require('uuid/v5');
+
+
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+res.header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+  next();
+});
+
+app.use(cors());
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 // POST / method
@@ -34,10 +44,28 @@ app.get("/", (request, response) => {
     });
 });
 
-exports.entries = functions.https.onRequest(app);
-
+    
 exports.helloWorld = functions.https.onRequest((request, response) => {
  response.send("Hello from Firebase!");
+});
+
+
+
+// ONCREATE
+// const countUp = () => {
+//   let count = 0;
+//   return count = count + 1;
+// }
+
+const MY_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341';
+const keyGen = uuidv5('Get_Key', MY_NAMESPACE); 
+exports.dbCreate = functions.database.ref('/entries/{id}').onCreate(
+(snapshot, context) => {
+    const createdData = snapshot.val();
+    const newData = {
+      key : keyGen,
+    };
+    return snapshot.ref.update(newData);
 });
 
 
